@@ -1,0 +1,102 @@
+/* form */
+
+.card {
+  border: solid 1px var(--color-light);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: rgb(11 43 158 / 15%) 0px 6px 20px -6px;
+  min-width: 400px;
+}
+
+/* form */
+form > * {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+form > input[type='submit'],
+form > button {
+  margin: 1rem 0;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+hr {
+  height: 1px;
+  border: none;
+  background-color: var(--color-light);
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+textarea {
+  border-radius: 0.3px;
+  width: 100%;
+  padding: 0.25rem 0.75rem;
+}
+
+textarea {
+  max-height: 7rem;
+}
+
+
+/* utilities */
+.text-center {
+  text-align: center;
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+@media (max-width: 768px) {
+  .header > .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  .brand {
+    order: 1;
+  }
+  .card {
+    max-width: 360px;
+  }
+  .feature {
+    flex-direction: column;
+  }
+  .feature-content,
+  .feature-image {
+    width: 100%;
+  }
+
+  .feature-image {
+    order: 1;
+  }
+  .feature-content {
+    order: 2;
+    text-align: center;
+  }
+  .feature-content .cta {
+    align-self: center;
+  }
+}

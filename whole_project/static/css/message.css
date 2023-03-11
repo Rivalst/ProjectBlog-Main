@@ -1,0 +1,33 @@
+/* alert */
+.alert {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  width: 25%;
+  margin: auto;
+}
+
+
+.alert-error {
+  background-color: #dc3545;
+  color: #f8f9fa;
+}
+
+.alert-warning {
+  background-color: #ffc107;
+  color: #f8f9fa;
+}
+
+.alert-info {
+  background-color: var(--color-info);
+  color: #f8f9fa;
+}
+
+.alert-success {
+  background-color: #28a745;
+  color: #f8f9fa;
+}
+
+
+
+

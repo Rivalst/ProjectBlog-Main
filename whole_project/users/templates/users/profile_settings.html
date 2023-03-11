@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load static %}
+
+<div class="top-form-up24">
+    <div class="center">
+        <form method="post" enctype="multipart/form-data" class="data">
+            {% csrf_token %}
+
+            {% if user.profile %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}"
+                 class="avatar">
+            {% endif %}
+
+
+            <h2 class="text-center"> {{ user.username }}</h2>
+            <p class="text-center"><a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            </p>
+            <hr>
+            <label for="username">Username: </label>
+            <input type="text" name="username" id="username" value="{{ user.username }}">
+
+            <label for="email">Email Address: </label>
+            <input type="email" name="email" id="email" value="{{ user.email }}">
+
+            <label for="avatar">Avatar: </label>
+            <input type="file" name="avatar" id="avatar">
+
+            <a href="{% url 'password-reset' %}">Reset password</a>
+            <button class="btn btn-primary full-width" type="submit">Update profile</button>
+        </form>
+    </div>
+<!--</div>-->
+
+{% endblock %}

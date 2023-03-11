@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+<title>Login</title>
+
+{% block content %}
+
+
+
+<div class="top-form-up23">
+    <div class="center">
+        <form method="post" class="card">
+            <h2>Register your account</h2>
+            {% csrf_token %}
+            {% for field in form %}
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% if field.errors %}
+            <small>{{ field.errors|striptags }}</small>
+            {% endif %}
+            {% endfor %}
+            <input type="submit" value="Register" class="btn btn-primary">
+            <a href="{% url 'home' %}">Cancel</a>
+            <hr>
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </form>
+    </div>
+</div>
+{% endblock %}
