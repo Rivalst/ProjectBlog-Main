@@ -3,9 +3,11 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 
+# ----- Model for profile users -----
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(default='avatar.jpg', upload_to='profile_avatars')
+    email_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -19,3 +21,4 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.avatar.path)
 
+# ----- End model  for profile users -----

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 
 
+# ----- Form for register -----
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
 
@@ -12,6 +13,10 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+
+# ----- End form for register -----
+
+# ----- Form for update user profile -----
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
@@ -23,3 +28,13 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', ]
+
+
+# ----- End form for update user profile -----
+
+# ----- Form for user delete account -----
+
+class DeleteAccountForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+# ----- End form for user delete account

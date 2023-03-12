@@ -16,22 +16,29 @@
 
 
             <h2 class="text-center"> {{ user.username }}</h2>
-            <p class="text-center"><a href="mailto:{{ user.email }}">{{ user.email }}</a>
-            </p>
+            <p class="text-center"><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             <hr>
             <label for="username">Username: </label>
             <input type="text" name="username" id="username" value="{{ user.username }}">
 
+            {% if user.profile.email_verified is False %}
+            <label for="email">Email Address: </label>
+            <input type="text" disabled="disabled" name="email" id="email" value="{{ user.email }}">
+            <small>For update need verify your email. <a href="{% url 'send_verification' %}">Verify</a></small>
+            {% else %}
             <label for="email">Email Address: </label>
             <input type="email" name="email" id="email" value="{{ user.email }}">
+            <hr>
+            {% endif %}
 
             <label for="avatar">Avatar: </label>
             <input type="file" name="avatar" id="avatar">
-
             <a href="{% url 'password-reset' %}">Reset password</a>
+            <a href="{% url 'delete-account' %}">Delete account</a>
             <button class="btn btn-primary full-width" type="submit">Update profile</button>
+
         </form>
     </div>
-<!--</div>-->
+    <!--</div>-->
 
-{% endblock %}
+    {% endblock %}

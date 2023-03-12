@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+<title>Login</title>
+
+{% block content %}
+{% load static %}
+<div class="center">
+    <form method="post" class="card">
+        <h2>Check password</h2>
+        {% csrf_token %}
+        {% for field in form %}
+        {{ field.label_tag }}
+        {{ field }}
+
+        {% if field.errors %}
+        <small>{{ field.errors|striptags }}</small>
+        {% endif %}
+        {% endfor %}
+        <input type="submit" value="Sumbit" class="btn btn-primary">
+        <a href="{% url 'home' %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}
