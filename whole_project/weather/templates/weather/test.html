@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+</head>
+<body>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/weather.css' %}">
+
+<div class="widget">
+
+    <div class="left-panel panel">
+        <div class="date">
+            {{ date_now }}
+        </div>
+        <div class="city">
+            {{ weather.city }}, {{ weather.country }}
+        </div>
+        <div class="temp">
+            {{ weather.temperature }}&deg;C
+        </div>
+    </div>
+    <div class="right-panel panel">
+        <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+    </div>
+
+</div>
+
+</body>
+</html>

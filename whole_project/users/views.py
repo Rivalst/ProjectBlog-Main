@@ -17,7 +17,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
-from termcolor import colored
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, DeleteAccountForm
 

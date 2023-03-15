@@ -65,7 +65,7 @@
                                         on any template collection site for the download purpose. <a rel="nofollow"
                                                                                                      href="https://templatemo.com/contact"
                                                                                                      target="_parent">Contact
-                                            TemplateMo</a> for more info. Thank you.</p>
+                                            TemplateMo</a> for more info. Thank you. </p>
                                     <div class="post-options">
                                         <div class="row">
                                             <div class="col-6">
@@ -167,10 +167,41 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!--    FOR WEATHER APP     -->
+                        <div class="widget-weather">
+
+                            <div class="left-panel panel">
+                                <div class="">
+<!--                                    {{ date_now }}-->
+                                    <span id="datetime"></span>
+                                </div>
+                                <div class="">
+                                    {{ weather.city }}, {{ weather.country }}
+                                </div>
+                                <div class="">
+                                    {{ weather.temperature }}&deg;C {{ weather.description }}
+                                </div>
+                            </div>
+                            <div class="right-panel panel">
+                                <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+                            </div>
+                        </div>
+                        <!--        END           -->
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    function updateDateTime() {
+        var now = new Date();
+        var datetime = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " " + now.toLocaleTimeString();
+        document.getElementById("datetime").innerHTML = datetime;
+    }
+    setInterval(updateDateTime, 1000);
+</script>
+
 {% endblock %}
