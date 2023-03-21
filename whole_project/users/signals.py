@@ -6,11 +6,11 @@ from .models import Profile
 
 
 # ----- Start signals for user profile create -----
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, **kwargs):
-    try:
-        instance.profile.save()
-    except Profile.DoesNotExist:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def save_profile(sender, instance, **kwargs):
+#     try:
+#         instance.profile.save()
+#     except Profile.DoesNotExist:
+#         Profile.objects.create(user=instance)
 
 # ----- End signals for user profile create-----

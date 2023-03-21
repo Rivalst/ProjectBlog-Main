@@ -6,5 +6,5 @@ class UsersConfig(AppConfig):
     name = 'users'
 
     # settings for profile users that 'Profile' in models create when users register...
-    def ready(self):
-        import users.signals
+    # def ready(self):
+    #     import users.signals

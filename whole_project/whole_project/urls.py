@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('home.urls')),
     path('', include('users.urls')),
     path('', include('weather.urls')),
+    path('', include('blog.urls')),
 ]
 
 if settings.DEBUG:

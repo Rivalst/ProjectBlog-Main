@@ -1,30 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Weather App</title>
-</head>
-<body>
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/weather.css' %}">
+{% extends 'base.html' %}
+<title>Login</title>
 
-<div class="widget">
+{% block content %}
 
-    <div class="left-panel panel">
-        <div class="date">
-            {{ date_now }}
-        </div>
-        <div class="city">
-            {{ weather.city }}, {{ weather.country }}
-        </div>
-        <div class="temp">
-            {{ weather.temperature }}&deg;C
-        </div>
+
+
+<div class="top-form-up23">
+    <div class="center">
+        <form method="post" class="card">
+            <div>Location: {{ weather.city }}, {{ weather.country }} </div>
+            <div>{{ weather.temperature }}&deg;C {{ weather.description }}  <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image"></div>
+        <label for="weather_location">Choose city</label>
+            <input id="weather_location">
+            <button type="submit" class="btn btn-primary full-width">Check</button>
+        </form>
     </div>
-    <div class="right-panel panel">
-        <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
-    </div>
-
 </div>
-
-</body>
-</html>
+{% endblock %}

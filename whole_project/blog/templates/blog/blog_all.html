@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+<title>Login</title>
+
+{% block content %}
+{% load static %}
+<div class="main-banner header-text">
+    it's a way
+</div>
+
+<section class="blog-posts grid-system">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        {% for blog in blogs %}
+                        <div class="col-lg-6">
+                            <div class="blog-post">
+                                {% if blog.image %}
+                                <div class="blog-thumb">
+                                    <img src="{{ blog.image.url }}" alt="">
+                                </div>
+                                {% endif %}
+                                <div class="down-content">
+                                    <span>{{ blog.category.last }}</span>
+                                    <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
+                                    <ul class="post-info">
+                                        <li><a href="#">{{ blog.author }}</a></li>
+                                        <li><a href="#">{{ blog.created_at }}</a></li>
+                                        <li><a href="#">{{ blog.comments.count }} comments</a></li>
+                                    </ul>
+                                    <p>{{ blog.text | truncatewords:50 }}</p>
+                                    <div class="post-options">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ul class="post-tags">
+                                                    {% for tag in blog.tag.all %}
+                                                    <li><i class="fa fa-user"></i></li>
+                                                    <li><i class="fa fa-tags"></i></li>
+                                                    <li><a href="#">{{ tag }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="col-lg-12">
+                            <ul class="page-numbers">
+                                <li>
+                                    {% if blogs.has_previous %}
+                                    <a href="?page=1">&laquo; first</a>
+                                    <a href="?page={{ blogs.previous_page_number }}">previous</a>
+                                    {% endif %}
+                                </li>
+
+                                <li>
+                                    {% for i in blogs.paginator.page_range %}
+                                    {% if blogs.number == i %}
+                                    <span class="current-page">{{ i }}</span>
+                                    {% else %}
+                                    <a href="?page={{ i }}">{{ i }}</a>
+                                    {% endif %}
+                                    {% endfor %}
+                                </li>
+
+                                <li>
+                                    {% if blogs.has_next %}
+                                    <a href="?page={{ blogs.next_page_number }}">next</a>
+                                    <a href="?page={{ blogs.paginator.num_pages }}">&raquo; last</a>
+                                    {% endif %}
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.views import View
 
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
 from django.contrib import messages
@@ -17,8 +17,12 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
-
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, DeleteAccountForm
+from .models import Profile
+
+from blog.models import Blog
+
+User = get_user_model()
 
 
 # ----- Register and login views -----
@@ -42,6 +46,7 @@ class UsersRegisterView(FormView):
     def form_valid(self, form):
         user = form.save()
         if user:
+            Profile.objects.get_or_create(user=user)
             login(self.request, user)
         return super().form_valid(form)
 
@@ -190,4 +195,20 @@ class UsersDeleteAccountVerifyView(LoginRequiredMixin, View):
             user.delete()
             messages.success(request, 'You successful delete your account')
             return redirect('home')
+
+
 # ----- End user delete account view -----
+
+# ----- User Profile View -----
+
+class UserProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        model_user = User
+
+        context = {
+            'model_user': model_user,
+        }
+
+        return render(request, 'users/profile.html', context=context)
+
+# ----- End User Profile View ----

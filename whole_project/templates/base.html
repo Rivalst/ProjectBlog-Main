@@ -64,7 +64,7 @@
                             {{ user.username }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Profile</a>
+                            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                             <a class="dropdown-item" href="{% url 'profile-settings' %}">Settings</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -90,8 +90,11 @@
     {% endfor %}
     {% endif %}
 </div>
+
+
 {% block content %}
 {% endblock %}
+
 
 
 
@@ -140,12 +143,6 @@
           t.style.color='#fff';
           }
       }
-
-
-
-
-
-
 </script>
 </body>
 </html>
