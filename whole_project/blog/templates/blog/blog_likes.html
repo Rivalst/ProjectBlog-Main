@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+<title>Blog likes</title>
+
+{% block content %}
+{% load static %}
+<div class="main-banner header-text">
+    it's a way
+</div>
+
+<section class="blog-posts grid-system">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="blog-post">
+                                <div class="blog-thumb-detail">
+                                    <img src="{{ blog.image.url }}" alt="">
+                                </div>
+                                <div class="down-content">
+                                    <span>{{ blog.category.last }}</span>
+                                    <a href="{% url 'blog-detail' blog.pk %}"><h4>{{ blog.title }}</h4></a>
+                                    <ul class="post-info">
+                                        <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
+                                        <li><a>{{ blog.created_at }}</a></li>
+                                        <li><a>{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} people
+                                            likes</a></li>
+
+                                    </ul>
+                                    <p>{{ blog.text }}</p>
+                                    <div class="post-options">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <ul class="post-tags">
+                                                    {% for tag in blog.tag.all %}
+                                                    <li><i class="fa fa-tags"></i></li>
+                                                    <li>{{ tag }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="col-6">
+                                                <ul class="post-share">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--                RIGHT SIDEBAR      -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item recent-posts">
+                                <div class="sidebar-heading">
+                                    <h2>People likes:</h2>
+                                </div>
+                                <div class="content">
+                                    {% for like in likes %}
+                                    <ul>
+                                        <li>
+                                            <div class="author-thumb">
+                                                <img src="{{ like.user.profile.avatar.url }}" alt="">
+                                            </div>
+                                            <div class="right-content">
+                                                <h3><small><a href="{% url 'author-view' like.user.pk %}">{{ like.user }}
+                                                    </a> liked {{ like.blog.title }}
+                                                </small></h3>
+                                            </div>
+                                        </li>
+                                        <hr>
+                                    </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

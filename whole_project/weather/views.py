@@ -4,7 +4,6 @@ from django.views import View
 from weather.utils import WeatherData
 
 from datetime import datetime
-import requests
 
 
 class WeatherView(View):
@@ -18,4 +17,3 @@ class WeatherView(View):
         }
 
         return render(request, 'weather/test.html', context=context)
-

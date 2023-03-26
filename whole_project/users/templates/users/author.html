@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+<title>Login</title>
+
+{% block content %}
+{% load static %}
+<div class="main-banner header-text">
+    it's a way
+</div>
+
+
+<section class="blog-posts grid-system">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        {% for blog in blogs %}
+                        <div class="col-lg-6">
+                            <div class="blog-post">
+                                {% if blog.image %}
+                                <div class="blog-thumb">
+                                    <img src="{{ blog.image.url }}" alt="">
+                                </div>
+                                {% endif %}
+                                <div class="down-content">
+                                    <span>{{ blog.category.last }}</span>
+                                    <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
+                                    <ul class="post-info">
+                                        <li><a href="#">{{ blog.author }}</a></li>
+                                        <li><a href="#">{{ blog.created_at }}</a></li>
+                                        <li><a href="#">{{ blog.comments.count }} comments</a></li>
+                                        {% if blog.updated_at %}
+                                        <li><a>Updated: {{ blog.updated_at }}</a></li>
+                                        {% endif %}
+                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} likes</a>
+
+                                    </ul>
+                                    <p>{{ blog.text | truncatewords:50 }}</p>
+                                    <div class="post-options">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ul class="post-tags">
+                                                    {% for tag in blog.tag.all %}
+                                                    <li><a href="#">{{ tag }}</a></li>
+                                                    {% endfor %}
+                                                    {% if request.user == blog.author %}
+                                                    <form method="post" action="{% url 'blog-update' blog.pk %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="Update" value="unlike">
+                                                        <button type="submit" class="btn btn-primary"> Update blog
+                                                        </button>
+                                                    </form>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!--                RIGHT SIDEBAR      -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item search">
+                                <form id="search_form" name="gs" method="GET">
+                                    <input type="text" name="q" id="q" class="searchText"
+                                           placeholder="type to search..."
+                                           autocomplete="on"
+                                           value="{{ q }}">
+                                    <button type="submit" class="btn btn-primary full-width">Search</button>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item search">
+                                <img src="{{ author.profile.avatar.url }}" alt=""
+                                     class="avatar">
+                                <h2><small>Author: {{ author }}</small></h2>
+                                <h3><small>Blogs: {{ blogs.count }}</small></h3>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

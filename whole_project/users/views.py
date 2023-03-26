@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic.edit import FormView
-from django.views import View
+from django.views import View, generic
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import get_user_model
@@ -16,11 +16,12 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from django.db.models import Q
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, DeleteAccountForm
 from .models import Profile
 
-from blog.models import Blog
+from blog.models import Blog, Tag, Categories
 
 User = get_user_model()
 
@@ -201,14 +202,31 @@ class UsersDeleteAccountVerifyView(LoginRequiredMixin, View):
 
 # ----- User Profile View -----
 
-class UserProfileView(LoginRequiredMixin, View):
-    def get(self, request):
-        model_user = User
+class AuthorDetailView(generic.DetailView):
+    model = User
+    template_name = 'users/author.html'
+    context_object_name = 'author'
 
-        context = {
-            'model_user': model_user,
-        }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
 
-        return render(request, 'users/profile.html', context=context)
+        blogs = Blog.objects.filter(author=user).order_by('-id')
+        blogs_last = Blog.objects.filter(author=user).order_by('-id')[:3]
 
+        tags = Tag.objects.filter(blog__author=user).distinct()
+        category = Categories.objects.filter(blog__author=user).distinct()
+
+        context['blogs'] = blogs
+        context['blogs_last'] = blogs_last
+        context['tags'] = tags
+        context['category'] = category
+
+        query = self.request.GET.get('q')
+        if query:
+            context['blogs'] = Blog.objects.filter(
+                Q(title__icontains=query) | Q(author__username__icontains=query))
+            context['q'] = query
+
+        return context
 # ----- End User Profile View ----

@@ -6,6 +6,7 @@ from .models import Profile
 
 User = get_user_model()
 
+
 # ----- Form for register -----
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=254)

@@ -11,7 +11,7 @@ urlpatterns = [
     path('register/', views.UsersRegisterView.as_view(), name='register'),
     path('logout/', views.UsersLogoutView.as_view(), name='logout'),
     path('profile-settings/', views.UsersProfileSettingsView.as_view(), name='profile-settings'),
-    path('profile/', views.UserProfileView.as_view(), name='profile'),
+    path('author/<int:pk>', views.AuthorDetailView.as_view(), name='author-view'),
     # ----- end main path -----
 
     # ----- delete account -----

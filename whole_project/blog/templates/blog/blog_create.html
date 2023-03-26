@@ -3,23 +3,33 @@
 
 {% block content %}
 {% load static %}
+<div class="main-banner header-text">
+    it's a way
+</div>
+
 <div class="center">
+    {% if user.profile.email_verified %}
     <h2>Create Blog</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="form-group">
             <label for="id_tags">Tags</label>
-            <input type="text" class="form-control" id="id_tags" name="tags">
+            <input type="text" class="form-control" id="id_tags" name="tags"
+                   value="{% for tag in tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
             <small class="form-text text-muted">Enter comma separated tags.</small>
         </div>
         <div class="form-group">
             <label for="id_category">Category</label>
-            <input type="text" class="form-control" id="id_category" name="category">
+            <input type="text" class="form-control" id="id_category" name="category"
+                   value="{% for category in category %}{{ category }} {% endfor %}">
+
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
-
+    {% else %}
+    <small>For create stand need verify your email. <a href="{% url 'send_verification' %}">Verify</a></small>
+    {% endif %}
 </div>
+
 {% endblock %}

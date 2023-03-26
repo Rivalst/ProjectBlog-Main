@@ -21,7 +21,6 @@ class WeatherData:
                 'units': 'metric'
             }
 
-            # weather_url_all = f'http://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid=900df223f73677a3705eaa7ba19b13bb'
             weather_api_url = 'http://api.openweathermap.org/data/2.5/weather'
             weather_data = requests.get(weather_api_url, params=weather_prams).json()
 

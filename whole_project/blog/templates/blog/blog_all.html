@@ -25,18 +25,21 @@
                                     <span>{{ blog.category.last }}</span>
                                     <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
-                                        <li><a href="#">{{ blog.author }}</a></li>
-                                        <li><a href="#">{{ blog.created_at }}</a></li>
-                                        <li><a href="#">{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
+                                        <li><a>{{ blog.created_at }}</a></li>
+                                        <li><a>{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} likes</a>
+                                        </li>
+                                        {% if blog.updated_at %}
+                                        <li><a>Updated: {{ blog.updated_at }}</a></li>
+                                        {% endif %}
                                     </ul>
-                                    <p>{{ blog.text | truncatewords:50 }}</p>
+                                    <p>{{ blog.text | truncatewords:25 }}</p>
                                     <div class="post-options">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <ul class="post-tags">
                                                     {% for tag in blog.tag.all %}
-                                                    <li><i class="fa fa-user"></i></li>
-                                                    <li><i class="fa fa-tags"></i></li>
                                                     <li><a href="#">{{ tag }}</a></li>
                                                     {% endfor %}
                                                 </ul>
@@ -49,24 +52,23 @@
                         {% endfor %}
                         <div class="col-lg-12">
                             <ul class="page-numbers">
-                                <li>
+                                <li class="active">
                                     {% if blogs.has_previous %}
                                     <a href="?page=1">&laquo; first</a>
                                     <a href="?page={{ blogs.previous_page_number }}">previous</a>
                                     {% endif %}
                                 </li>
-
-                                <li>
+                                <li class="active">
                                     {% for i in blogs.paginator.page_range %}
                                     {% if blogs.number == i %}
-                                    <span class="current-page">{{ i }}</span>
+                                    <span class="current-page"><a>{{ i }}</a></span>
                                     {% else %}
                                     <a href="?page={{ i }}">{{ i }}</a>
                                     {% endif %}
                                     {% endfor %}
                                 </li>
 
-                                <li>
+                                <li class="active" >
                                     {% if blogs.has_next %}
                                     <a href="?page={{ blogs.next_page_number }}">next</a>
                                     <a href="?page={{ blogs.paginator.num_pages }}">&raquo; last</a>
@@ -79,8 +81,103 @@
                     </div>
                 </div>
             </div>
+            <!--                RIGHT SIDEBAR      -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item search">
+                                <form id="search_form" name="gs" method="GET">
+                                    <input type="text" name="q" id="q" class="searchText"
+                                           placeholder="type to search..."
+                                           autocomplete="on"
+                                           value="{{ q }}">
+                                    <button type="submit" class="btn btn-primary full-width">Search</button>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item recent-posts">
+                                <div class="sidebar-heading">
+                                    <h2>Recent Posts</h2>
+                                </div>
+                                <div class="content">
+                                    <ul>
+                                        {% for blog in right_bar.model_blog_recent %}
+                                        <li><a href="{{ blog.get_absolute_url }}">
+                                            <h5>{{ blog.title }}</h5>
+                                            <span>{{ blog.created_at }}</span>
+                                        </a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item categories">
+                                <div class="sidebar-heading">
+                                    <h2>Categories</h2>
+                                </div>
+                                <div class="content">
+                                    {% for category in right_bar.model_category %}
+                                    <ul>
+                                        <li><a href="#">- {{ category }}</a></li>
+                                    </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item tags">
+                                <div class="sidebar-heading">
+                                    <h2>Tag Clouds</h2>
+                                </div>
+                                <div class="content">
+                                    <ul>
+                                        {% for tag in right_bar.model_tag %}
+                                        <li><a href="#">{{ tag }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--                            FOR WEATHER APP     -->
+                        <div class="widget-weather">
+
+                            <div class="left-panel panel">
+                                <div class="">
+                                    <!--                                    {{ date_now }}-->
+                                    <span id="datetime"></span>
+                                </div>
+                                <div class="">
+                                    {{ weather.city }}, {{ weather.country }}
+                                </div>
+                                <div class="">
+                                    {{ weather.temperature }}&deg;C {{ weather.description }}
+                                </div>
+                            </div>
+                            <div class="right-panel panel">
+                                <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+                            </div>
+                        </div>
+                        <!--                                END           -->
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+<script>
+    function updateDateTime() {
+        var now = new Date();
+        var datetime = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " " + now.toLocaleTimeString();
+        document.getElementById("datetime").innerHTML = datetime;
+    }
+    setInterval(updateDateTime, 1000);
+</script>
 
 {% endblock %}

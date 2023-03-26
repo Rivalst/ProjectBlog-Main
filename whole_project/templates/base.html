@@ -46,16 +46,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About Us</a>
+                        <a class="nav-link" href="{% url 'not-work' %}">Posts subscriptions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.html">Blog Entries</a>
+                        <a class="nav-link" href="{% url 'blog-all' %}">All blogs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="post-details.html">Post Details</a>
+                        <a class="nav-link" href="{% url 'not-work' %}">Search tag</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact Us</a>
+                        <a class="nav-link" href="{% url 'not-work' %}">Search category</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -64,8 +64,11 @@
                             {{ user.username }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                             <a class="dropdown-item" href="{% url 'profile-settings' %}">Settings</a>
+                            <a class="dropdown-item" href="{% url 'blog-create' %}">Create Blog</a>
+                            <a class="dropdown-item" href="{% url 'author-view' user.pk %}">All my blogs</a>
+                            <a class="dropdown-item" href="{% url 'not-work' %}">All my likes</a>
+
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                         </div>
@@ -94,8 +97,6 @@
 
 {% block content %}
 {% endblock %}
-
-
 
 
 <footer>
@@ -143,6 +144,9 @@
           t.style.color='#fff';
           }
       }
+
+
+
 </script>
 </body>
 </html>

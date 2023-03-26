@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+<title>Login</title>
+
+{% block content %}
+{% load static %}
+<div class="center">
+    <h4>You sure that you want to delete {{ blog.title }} ?</h4>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" id="form-submit" class="btn btn-primary full-width">Delete</button>
+    </form>
+</div>
+{% endblock %}

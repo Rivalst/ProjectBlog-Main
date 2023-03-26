@@ -19,9 +19,9 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         img = Image.open(self.avatar.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+        max_size = 300
+        if img.height > max_size or img.width > max_size:
+            output_size = (max_size, max_size)
             img.thumbnail(output_size)
             img.save(self.avatar.path)
-
 # ----- End model  for profile users -----

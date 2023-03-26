@@ -15,16 +15,19 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="blog-post">
-                                <div class="blog-thumb">
+                                <div class="blog-thumb-detail">
                                     <img src="{{ blog.image.url }}" alt="">
                                 </div>
                                 <div class="down-content">
                                     <span>{{ blog.category.last }}</span>
-                                    <a href="post-details.html"><h4>{{ blog.title }}</h4></a>
+                                    <a href="{% url 'blog-detail' blog.pk %} "><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
-                                        <li><a href="#">{{ blog.author }}</a></li>
-                                        <li><a href="#">{{ blog.created_at }}</a></li>
-                                        <li><a href="#">{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
+                                        <li><a>{{ blog.created_at }}</a></li>
+                                        <li><a>{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ like_count }} people likes</a>
+                                        </li>
+
                                     </ul>
                                     <p>{{ blog.text }}</p>
                                     <div class="post-options">
@@ -39,9 +42,23 @@
                                             </div>
                                             <div class="col-6">
                                                 <ul class="post-share">
-                                                    <li><i class="fa fa-share-alt"></i></li>
-                                                    <li><a href="#">Facebook</a>,</li>
-                                                    <li><a href="#"> Twitter</a></li>
+                                                    {% if request.user.is_authenticated %}
+                                                    {% if is_liked %}
+                                                    <form method="post" action="{% url 'blog-detail' blog.pk %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="like" value="unlike">
+                                                        <button type="submit" class="btn btn-danger"> Unlike
+                                                        </button>
+                                                    </form>
+                                                    {% else %}
+                                                    <form method="post" action="{% url 'blog-detail' blog.pk %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="like" value="like">
+                                                        <button type="submit" class="btn btn-primary">Like
+                                                        </button>
+                                                    </form>
+                                                    {% endif %}
+                                                    {% endif %}
                                                 </ul>
                                             </div>
                                         </div>
@@ -49,44 +66,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="sidebar-item comments">
-                                <div class="sidebar-heading">
-                                    <h2>{{ blog.comments.count }} comments</h2>
-                                </div>
-                                <div class="content">
-
-                                    <ul>
-                                        {% for comments in blog.comments.all %}
-                                        <li>
-                                            <div class="author-thumb">
-                                                <img src="{{ comments.author.profile.avatar.url }}" alt="">
-                                            </div>
-                                            <div class="right-content">
-                                                <h4>{{ comments.author }}<span>{{ comments.created_date }}</span></h4>
-                                                <p>{{ comments.text }}</p>
-                                            </div>
-                                        </li>
-
-                                        <hr>
-<!--                                        <li class="replied">-->
-<!--                                            <div class="author-thumb">-->
-<!--                                                <img src="assets/images/comment-author-02.jpg" alt="">-->
-<!--                                            </div>-->
-<!--                                            <div class="right-content">-->
-<!--                                                <h4>Thirteen Man<span>May 20, 2020</span></h4>-->
-<!--                                                <p>In porta urna sed venenatis sollicitudin. Praesent urna sem, pulvinar-->
-<!--                                                    vel mattis eget.</p>-->
-<!--                                            </div>-->
-<!--                                        </li>-->
-                                        {% endfor %}
-                                    </ul>
-
-
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="col-lg-12">
                             <div class="sidebar-item submit-comment">
                                 <div class="sidebar-heading">
@@ -122,20 +101,36 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item comments">
+                                <div class="sidebar-heading">
+                                    <h2>{{ blog.comments.count }} comments</h2>
+                                </div>
+                                <div class="content">
+                                    {% for comments in blog.comments.all %}
+                                    <ul>
+                                        <li>
+                                            <div class="author-thumb">
+                                                <img src="{{ comments.author.profile.avatar.url }}" alt="">
+                                            </div>
+                                            <div class="right-content">
+                                                <h4><a href="{% url 'author-view' comments.author.pk %}">{{ comments.author }}</a><span>{{ comments.created_date }}</span></h4>
+                                                <p>{{ comments.text }}</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--                RIGHT SIDEBAR      -->
             <div class="col-lg-4">
                 <div class="sidebar">
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="sidebar-item search">
-                                <form id="search_form" name="gs" method="GET" action="#">
-                                    <input type="text" name="q" class="searchText" placeholder="type to search..."
-                                           autocomplete="on">
-                                </form>
-                            </div>
-                        </div>
                         <div class="col-lg-12">
                             <div class="sidebar-item recent-posts">
                                 <div class="sidebar-heading">
@@ -143,18 +138,12 @@
                                 </div>
                                 <div class="content">
                                     <ul>
-                                        <li><a href="post-details.html">
-                                            <h5>Vestibulum id turpis porttitor sapien facilisis scelerisque</h5>
-                                            <span>May 31, 2020</span>
+                                        {% for blog in right_bar.model_blog_recent %}
+                                        <li><a href="{{ blog.get_absolute_url }}">
+                                            <h5>{{ blog.title }}</h5>
+                                            <span>{{ blog.created_at }}</span>
                                         </a></li>
-                                        <li><a href="post-details.html">
-                                            <h5>Suspendisse et metus nec libero ultrices varius eget in risus</h5>
-                                            <span>May 28, 2020</span>
-                                        </a></li>
-                                        <li><a href="post-details.html">
-                                            <h5>Swag hella echo park leggings, shaman cornhole ethical coloring</h5>
-                                            <span>May 14, 2020</span>
-                                        </a></li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
@@ -165,14 +154,11 @@
                                     <h2>Categories</h2>
                                 </div>
                                 <div class="content">
+                                    {% for category in right_bar.model_category %}
                                     <ul>
-                                        <li><a href="#">- Nature Lifestyle</a></li>
-                                        <li><a href="#">- Awesome Layouts</a></li>
-                                        <li><a href="#">- Creative Ideas</a></li>
-                                        <li><a href="#">- Responsive Templates</a></li>
-                                        <li><a href="#">- HTML5 / CSS3 Templates</a></li>
-                                        <li><a href="#">- Creative &amp; Unique</a></li>
+                                        <li><a href="#">- {{ category }}</a></li>
                                     </ul>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -183,21 +169,49 @@
                                 </div>
                                 <div class="content">
                                     <ul>
-                                        <li><a href="#">Lifestyle</a></li>
-                                        <li><a href="#">Creative</a></li>
-                                        <li><a href="#">HTML5</a></li>
-                                        <li><a href="#">Inspiration</a></li>
-                                        <li><a href="#">Motivation</a></li>
-                                        <li><a href="#">PSD</a></li>
-                                        <li><a href="#">Responsive</a></li>
+                                        {% for tag in right_bar.model_tag %}
+                                        <li><a href="#">{{ tag }}</a></li>
+                                        {% endfor %}
                                     </ul>
+
                                 </div>
                             </div>
                         </div>
+
+                        <!--                            FOR WEATHER APP     -->
+                        <div class="widget-weather">
+
+                            <div class="left-panel panel">
+                                <div class="">
+                                    <!--                                    {{ date_now }}-->
+                                    <span id="datetime"></span>
+                                </div>
+                                <div class="">
+                                    {{ weather.city }}, {{ weather.country }}
+                                </div>
+                                <div class="">
+                                    {{ weather.temperature }}&deg;C {{ weather.description }}
+                                </div>
+                            </div>
+                            <div class="right-panel panel">
+                                <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+                            </div>
+                        </div>
+                        <!--                                END           -->
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    function updateDateTime() {
+        var now = new Date();
+        var datetime = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " " + now.toLocaleTimeString();
+        document.getElementById("datetime").innerHTML = datetime;
+    }
+    setInterval(updateDateTime, 1000);
+</script>
+
 {% endblock %}

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from PIL import Image
+
 User = get_user_model()
 
 
@@ -10,14 +12,11 @@ class Blog(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
     image = models.ImageField(default='blog-post-01.jpg', upload_to='blog_avatars')
 
     def __str__(self):
         return f'{self.title} by: {self.author}'
-
-    class Meta:
-        ordering = ['created_at']
 
     def get_absolute_url(self):
         return reverse('blog-detail', args=[str(self.id)])
@@ -47,3 +46,11 @@ class Categories(models.Model):
 
     def __str__(self):
         return self.category
+
+
+class Like(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} liked {self.blog}'

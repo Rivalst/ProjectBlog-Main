@@ -18,22 +18,25 @@
 <div class="main-banner header-text">
     <div class="container-fluid">
         <div class="owl-banner owl-carousel">
+            {% for blog in model_blog_top_likes %}
             <div class="item">
-                <img src="{% static 'images/banner-item-01.jpg' %}" alt="">
+                <img src="{{ blog.image.url }}" alt="">
                 <div class="item-content">
                     <div class="main-content">
                         <div class="meta-category">
-                            <span>Fashion</span>
+                            <span>{{ blog.category.last }}</span>
                         </div>
-                        <a href="post-details.html"><h4>Morbi dapibus condimentum</h4></a>
+                        <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                         <ul class="post-info">
-                            <li><a href="#">Admin</a></li>
-                            <li><a href="#">May 12, 2020</a></li>
-                            <li><a href="#">12 Comments</a></li>
+                            <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
+                            <li><a>{{ blog.created_at }}</a></li>
+                            <li><a>{{ blog.comments.count }} comments</a></li>
+                            <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} likes</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -49,21 +52,22 @@
                         {% for blog in model_blog %}
                         <div class="col-lg-12">
                             <div class="blog-post">
-                                <div class="blog-thumb">
+                                <div class="blog-thumb-detail">
                                     <img src="{{ blog.image.url }}" alt="">
                                 </div>
                                 <div class="down-content">
                                     <span>{{ blog.category.last }}</span>
                                     <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
-                                        <li><a href="#">{{ blog.author }}</a></li>
-                                        <li><a href="#">{{ blog.created_at }}</a></li>
-                                        <li><a href="#">{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
+                                        <li><a>{{ blog.created_at }}</a></li>
+                                        <li><a>{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} likes</a></li>
+                                        {% if blog.updated_at %}
+                                        <li><a>Updated: {{ blog.updated_at }}</a></li>
+                                        {% endif %}
                                     </ul>
-                                    <p>{{ blog.text | truncatewords:50 }} <br> <a rel="nofollow"
-                                                                                  href="https://templatemo.com/contact"
-                                                                                  target="_parent">Contact
-                                        TemplateMo</a> for more info. Thank you. </p>
+                                    <p>{{ blog.text | truncatewords:50 }}
                                     <div class="post-options">
                                         <div class="row">
                                             <div class="col-6">
@@ -71,20 +75,22 @@
                                                 <ul class="post-tags">
                                                     {% for tag in blog.tag.all %}
                                                     <li><i class="fa fa-tags"></i></li>
-                                                    <li><a href="#">{{ tag }}</a>,</li>
+                                                    <li><a href="#">{{ tag }}</a></li>
                                                     {% endfor %}
 
                                                 </ul>
                                             </div>
                                             <div class="col-6">
                                                 <ul class="post-share">
-                                                    <li><i class="fa fa-share-alt"></i></li>
-                                                    <li><a href="#">Facebook</a>,</li>
-                                                    <li><a href="#"> Twitter</a></li>
                                                 </ul>
                                             </div>
+
                                         </div>
                                     </div>
+
+                                </div>
+                                <div class="main-button">
+                                    <a href="{{ blog.get_absolute_url }}">Check Post</a>
                                 </div>
                             </div>
                         </div>
@@ -104,9 +110,13 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="sidebar-item search">
-                                <form id="search_form" name="gs" method="GET" action="#">
-                                    <input type="text" name="q" class="searchText" placeholder="type to search..."
-                                           autocomplete="on">
+                                <form id="search_form" name="gs" method="GET">
+                                    <input type="text" name="q" id="q" class="searchText"
+                                           placeholder="type to search..."
+                                           autocomplete="on"
+                                           value="{{ q }}">
+                                    <button type="submit" class="btn btn-primary full-width">Search</button>
+
                                 </form>
                             </div>
                         </div>
@@ -117,18 +127,12 @@
                                 </div>
                                 <div class="content">
                                     <ul>
-                                        <li><a href="post-details.html">
-                                            <h5>Vestibulum id turpis porttitor sapien facilisis scelerisque</h5>
-                                            <span>May 31, 2020</span>
+                                        {% for blog in model_blog_recent %}
+                                        <li><a href="{{ blog.get_absolute_url }}">
+                                            <h5>{{ blog.title }}</h5>
+                                            <span>{{ blog.created_at }}</span>
                                         </a></li>
-                                        <li><a href="post-details.html">
-                                            <h5>Suspendisse et metus nec libero ultrices varius eget in risus</h5>
-                                            <span>May 28, 2020</span>
-                                        </a></li>
-                                        <li><a href="post-details.html">
-                                            <h5>Swag hella echo park leggings, shaman cornhole ethical coloring</h5>
-                                            <span>May 14, 2020</span>
-                                        </a></li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
@@ -153,11 +157,12 @@
                                     <h2>Tag Clouds</h2>
                                 </div>
                                 <div class="content">
-                                    {% for tag in model_tag %}
                                     <ul>
+                                        {% for tag in model_tag %}
                                         <li><a href="#">{{ tag }}</a></li>
+                                        {% endfor %}
                                     </ul>
-                                    {% endfor %}
+
                                 </div>
                             </div>
                         </div>
@@ -190,18 +195,12 @@
     </div>
 </section>
 <script>
-                function updateDateTime() {
-                    var now = new Date();
-                    var datetime = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " " + now.toLocaleTimeString();
-                    document.getElementById("datetime").innerHTML = datetime;
-                }
-                setInterval(updateDateTime, 1000);
-
-
-
-
-
-
+    function updateDateTime() {
+        var now = new Date();
+        var datetime = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " " + now.toLocaleTimeString();
+        document.getElementById("datetime").innerHTML = datetime;
+    }
+    setInterval(updateDateTime, 1000);
 </script>
 
 
