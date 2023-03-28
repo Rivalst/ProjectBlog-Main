@@ -167,6 +167,7 @@ class BlogLikesView(generic.DetailView):
         return context
 
 
+# ----- View for Tags -----
 class BlogAllTagView(generic.ListView):
     model = Tag
     template_name = 'blog/blog_tag_all.html'
@@ -194,6 +195,43 @@ class BlogTagDetailView(generic.DetailView):
         query = self.request.GET.get('q')
         if query:
             context['blog_tags'] = context['blog_tags'].filter(
+                Q(title__icontains=query) | Q(author__username__icontains=query))
+            context['q'] = query
+
+        return context
+
+
+# ----- End View for Tags -----
+
+# ----- View for Categories -----
+
+class BlogCategoryAllView(generic.ListView):
+    model = Categories
+    template_name = 'blog/blog_category_all.html'
+    context_object_name = 'category'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            return queryset.filter(Q(category__icontains=query))
+
+        return queryset.order_by('-id')
+
+
+class BlogCategoryDetailView(generic.DetailView):
+    model = Categories
+    template_name = 'blog/blog_category_detail.html'
+    context_object_name = 'category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog_categories'] = Blog.objects.filter(category=self.object)
+
+        query = self.request.GET.get('q')
+        if query:
+            context['blog_categories'] = context['blog_categories'].filter(
                 Q(title__icontains=query) | Q(author__username__icontains=query))
             context['q'] = query
 

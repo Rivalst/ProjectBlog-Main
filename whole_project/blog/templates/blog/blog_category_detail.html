@@ -7,14 +7,13 @@
     it's a way
 </div>
 
-
 <section class="blog-posts grid-system">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
                 <div class="all-blog-posts">
                     <div class="row">
-                        {% for blog in blogs %}
+                        {% for blog in blog_categories %}
                         <div class="col-lg-6">
                             <div class="blog-post">
                                 {% if blog.image %}
@@ -23,19 +22,19 @@
                                 </div>
                                 {% endif %}
                                 <div class="down-content">
-                                    <span><a href="{% url 'blog-category-detail' blog.category.last.pk %}">{{ blog.category.last }}</a></span>
+                                    <span><a href="{% url 'blog-category-detail' category.pk %}">{{ blog.category.last }}</a></span>
                                     <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
-                                        <li><a href="#">{{ blog.author }}</a></li>
-                                        <li><a href="#">{{ blog.created_at }}</a></li>
-                                        <li><a href="#">{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
+                                        <li><a>{{ blog.created_at }}</a></li>
+                                        <li><a>{{ blog.comments.count }} comments</a></li>
+                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} likes</a>
+                                        </li>
                                         {% if blog.updated_at %}
                                         <li><a>Updated: {{ blog.updated_at }}</a></li>
                                         {% endif %}
-                                        <li><a href="{% url 'blog-likes' blog.pk %}">{{ blog.likes.count }} likes</a>
-
                                     </ul>
-                                    <p>{{ blog.text | truncatewords:50 }}</p>
+                                    <p>{{ blog.text | truncatewords:25 }}</p>
                                     <div class="post-options">
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -43,20 +42,16 @@
                                                     {% for tag in blog.tag.all %}
                                                     <li><a href="{% url 'blog-tag-detail' tag.pk %}">{{ tag }}</a></li>
                                                     {% endfor %}
-                                                    {% if request.user == blog.author %}
-                                                    <form method="post" action="{% url 'blog-update' blog.pk %}">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="Update" value="unlike">
-                                                        <button type="submit" class="btn btn-primary"> Update blog
-                                                        </button>
-                                                    </form>
-                                                    {% endif %}
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        {% empty %}
+                        <div class="center">
+                            <p>No blogs with this search</p>
                         </div>
                         {% endfor %}
                     </div>
@@ -68,6 +63,8 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="sidebar-item search">
+                                <h4>Tag: {{ tag }}</h4>
+                                <br>
                                 <form id="search_form" name="gs" method="GET">
                                     <input type="text" name="q" id="q" class="searchText"
                                            placeholder="type to search..."
@@ -78,21 +75,12 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="sidebar-item search">
-                                <img src="{{ author.profile.avatar.url }}" alt=""
-                                     class="avatar">
-                                <h2><small>Author: {{ author }}</small></h2>
-                                <h3><small>Blogs: {{ blogs.count }}</small></h3>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 </section>
-
 
 {% endblock %}

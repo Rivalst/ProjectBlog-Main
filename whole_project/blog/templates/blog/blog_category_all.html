@@ -28,14 +28,14 @@
                                 <div class="blog-post">
                                     <div class="sidebar-item tags">
                                         <div class="sidebar-heading">
-                                            <h2>Tag Clouds</h2>
+                                            <h2>Categories</h2>
                                         </div>
                                         <div class="content">
                                             <ul>
-                                                {% for tag in tag %}
-                                                <li><a href="{% url 'blog-tag-detail' tag.pk %}">{{ tag }}</a></li>
+                                                {% for category in category %}
+                                                <li><a href="{% url 'blog-category-detail' category.pk %}">{{ category }}</a></li>
                                                 {% empty %}
-                                                <p>No tag for this search</p>
+                                                <p>No category for this search</p>
                                                 {% endfor %}
                                             </ul>
 

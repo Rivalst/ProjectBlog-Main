@@ -12,5 +12,8 @@ urlpatterns = [
     path('tags-all/', views.BlogAllTagView.as_view(), name='blog-all-tag'),
     path('tag-detail/<int:pk>', views.BlogTagDetailView.as_view(), name='blog-tag-detail'),
 
+    path('categories-all/', views.BlogCategoryAllView.as_view(), name='blog-category-all'),
+    path('categories-detail/<int:pk>', views.BlogCategoryDetailView.as_view(), name='blog-category-detail'),
+
     path('blog-don\'t-work', views.NotWork.as_view(), name='not-work'),  # path for empty page
 ]

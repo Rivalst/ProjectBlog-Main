@@ -24,7 +24,7 @@
                 <div class="item-content">
                     <div class="main-content">
                         <div class="meta-category">
-                            <span>{{ blog.category.last }}</span>
+                            <span><a href="{% url 'blog-category-detail' blog.category.last.pk %}">{{ blog.category.last }}</a></span>
                         </div>
                         <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                         <ul class="post-info">
@@ -56,7 +56,7 @@
                                     <img src="{{ blog.image.url }}" alt="">
                                 </div>
                                 <div class="down-content">
-                                    <span>{{ blog.category.last }}</span>
+                                    <span><a href="{% url 'blog-category-detail' blog.category.last.pk %}">{{ blog.category.last }}</a></a></span>
                                     <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
                                         <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
@@ -145,7 +145,7 @@
                                 <div class="content">
                                     {% for category in model_category %}
                                     <ul>
-                                        <li><a href="#">- {{ category }}</a></li>
+                                        <li><a href="{% url 'blog-category-detail' category.pk %}">- {{ category }}</a></li>
                                     </ul>
                                     {% endfor %}
                                 </div>

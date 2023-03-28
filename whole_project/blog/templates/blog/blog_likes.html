@@ -19,7 +19,7 @@
                                     <img src="{{ blog.image.url }}" alt="">
                                 </div>
                                 <div class="down-content">
-                                    <span>{{ blog.category.last }}</span>
+                                    <span><a href="{% url 'blog-category-detail' blog.category.last.pk %}">{{ blog.category.last }}</a></span>
                                     <a href="{% url 'blog-detail' blog.pk %}"><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
                                         <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
