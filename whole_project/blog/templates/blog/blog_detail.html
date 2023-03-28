@@ -170,7 +170,7 @@
                                 <div class="content">
                                     <ul>
                                         {% for tag in right_bar.model_tag %}
-                                        <li><a href="#">{{ tag }}</a></li>
+                                        <li><a href="{% url 'blog-tag-detail' tag.pk %}">{{ tag }}</a></li>
                                         {% endfor %}
                                     </ul>
 

@@ -9,5 +9,8 @@ urlpatterns = [
     path('blog-delete/<int:pk>/', views.BlogDeleteView.as_view(), name='blog-delete'),
     path('blog-likes/<int:pk>/', views.BlogLikesView.as_view(), name='blog-likes'),
 
+    path('tags-all/', views.BlogAllTagView.as_view(), name='blog-all-tag'),
+    path('tag-detail/<int:pk>', views.BlogTagDetailView.as_view(), name='blog-tag-detail'),
+
     path('blog-don\'t-work', views.NotWork.as_view(), name='not-work'),  # path for empty page
 ]

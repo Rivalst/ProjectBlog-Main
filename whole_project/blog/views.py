@@ -167,5 +167,38 @@ class BlogLikesView(generic.DetailView):
         return context
 
 
+class BlogAllTagView(generic.ListView):
+    model = Tag
+    template_name = 'blog/blog_tag_all.html'
+    context_object_name = 'tag'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            return queryset.filter(Q(tag__icontains=query))
+
+        return queryset.order_by('-id')
+
+
+class BlogTagDetailView(generic.DetailView):
+    model = Tag
+    template_name = 'blog/blog_tag_detail.html'
+    context_object_name = 'tag'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog_tags'] = Blog.objects.filter(tag=self.object)
+
+        query = self.request.GET.get('q')
+        if query:
+            context['blog_tags'] = context['blog_tags'].filter(
+                Q(title__icontains=query) | Q(author__username__icontains=query))
+            context['q'] = query
+
+        return context
+
+
 class NotWork(generic.TemplateView):  # View for empty page
     template_name = 'notwork.html'

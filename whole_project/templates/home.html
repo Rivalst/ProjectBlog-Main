@@ -75,7 +75,7 @@
                                                 <ul class="post-tags">
                                                     {% for tag in blog.tag.all %}
                                                     <li><i class="fa fa-tags"></i></li>
-                                                    <li><a href="#">{{ tag }}</a></li>
+                                                    <li><a href="{% url 'blog-tag-detail' tag.pk %}">{{ tag }}</a></li>
                                                     {% endfor %}
 
                                                 </ul>
@@ -159,7 +159,7 @@
                                 <div class="content">
                                     <ul>
                                         {% for tag in model_tag %}
-                                        <li><a href="#">{{ tag }}</a></li>
+                                        <li><a href="{% url 'blog-tag-detail' tag.pk %}">{{ tag }}</a></li>
                                         {% endfor %}
                                     </ul>
 

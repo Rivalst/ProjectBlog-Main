@@ -36,7 +36,7 @@
                                                 <ul class="post-tags">
                                                     {% for tag in blog.tag.all %}
                                                     <li><i class="fa fa-tags"></i></li>
-                                                    <li>{{ tag }}</li>
+                                                    <li><a href="{% url 'blog-tag-detail' tag.pk %}">{{ tag }}</a></li>
                                                     {% endfor %}
                                                 </ul>
                                             </div>
