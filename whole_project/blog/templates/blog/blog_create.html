@@ -1,32 +1,48 @@
 {% extends 'base.html' %}
-<title>Create blog</title>
+<title>{% if object.pk %}Update{% else %}Create{% endif %} blog</title>
 
 {% block content %}
 {% load static %}
 <div class="main-banner header-text">
     it's a way
+    <br>
+    <br>
+    <br>
+    <br>
 </div>
 
 <div class="center">
     {% if user.profile.email_verified %}
-    <h2>Create Blog</h2>
+    <h2>{% if object.pk %}Update{% else %}Create{% endif %} blog</h2>
     <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div class="form-group">
-            <label for="id_tags">Tags</label>
-            <input type="text" class="form-control" id="id_tags" name="tags"
-                   value="{% for tag in tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
-            <small class="form-text text-muted">Enter comma separated tags.</small>
-        </div>
-        <div class="form-group">
-            <label for="id_category">Category</label>
-            <input type="text" class="form-control" id="id_category" name="category"
-                   value="{% for category in category %}{{ category }} {% endfor %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ form.title.id_for_label }}">Title:</label>
+        <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ object.title }}">
+    </div>
+    <div class="form-group">
+        <label for="{{ form.text.id_for_label }}">Text:</label>
+        <textarea class="form-control" id="{{ form.text.id_for_label }}" name="{{ form.text.name }}" rows="10">{{ object.text }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="{{ form.image.id_for_label }}">Image:</label>
+        <input type="file" id="{{ form.image.id_for_label }}" name="{{ form.image.name }}">
+    </div>
+    <div class="form-group">
+        <label for="id_tags">Tags</label>
+        <input type="text" class="form-control" id="id_tags" name="tags"
+               value="{% for tag in tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+        <small class="form-text text-muted">Enter comma separated tags.</small>
+    </div>
+    <div class="form-group">
+        <label for="id_category">Category</label>
+        <input type="text" class="form-control" id="id_category" name="category"
+               value="{% for category in category %}{{ category }} {% endfor %}">
 
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
     {% else %}
     <small>For create stand need verify your email. <a href="{% url 'send_verification' %}">Verify</a></small>
     {% endif %}

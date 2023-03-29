@@ -15,3 +15,7 @@ M
 whole_project/users/models.py,c/9/c9df0343fac09adcf87c27502faf9d60c33bb8dd
 K
 whole_project/blog/forms.py,7/f/7f6e7bb7545fb01143b18f487cdff2ad89645dbe
+Q
+!whole_project/templates/base.html,0/1/010f19db5eff1ef06afc6ba1284da28e14410484
+K
+whole_project/home/views.py,4/2/42ec5c7e8eafa1e2c76d87b349b6a4a38f084c1b

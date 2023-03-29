@@ -127,6 +127,12 @@ class BlogUpdateView(LoginRequiredMixin, generic.UpdateView):
         context['category'] = self.object.category.all()
         return context
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['title'] = self.object.title
+        initial['text'] = self.object.text
+        return initial
+
     def form_valid(self, form):
         form.instance.author = self.request.user
 
@@ -143,7 +149,7 @@ class BlogUpdateView(LoginRequiredMixin, generic.UpdateView):
         form.instance.updated_at = datetime.now()
 
         messages.success(self.request, 'Stand successful update')
-        return super().form_valid(form)
+        return super().form_valid(form, self.object)
 
 
 class BlogDeleteView(LoginRequiredMixin, generic.DeleteView):

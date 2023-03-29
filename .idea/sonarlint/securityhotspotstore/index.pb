@@ -15,3 +15,7 @@ L
 whole_project/users/tests.py,0/f/0fbdddc406c0d6a00d50e4cd36cfa073461816d5
 N
 whole_project/weather/utils.py,0/5/0572f0c96d6b9cf202e44a04c13a271a10859434
+Q
+!whole_project/templates/base.html,0/1/010f19db5eff1ef06afc6ba1284da28e14410484
+K
+whole_project/home/views.py,4/2/42ec5c7e8eafa1e2c76d87b349b6a4a38f084c1b
