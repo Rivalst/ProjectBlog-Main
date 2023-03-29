@@ -149,7 +149,7 @@ class BlogUpdateView(LoginRequiredMixin, generic.UpdateView):
         form.instance.updated_at = datetime.now()
 
         messages.success(self.request, 'Stand successful update')
-        return super().form_valid(form, self.object)
+        return super().form_valid(form)
 
 
 class BlogDeleteView(LoginRequiredMixin, generic.DeleteView):
