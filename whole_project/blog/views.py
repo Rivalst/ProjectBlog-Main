@@ -29,7 +29,7 @@ weather_view = WeatherData()
 # ----- Blogs CRUD -----
 class BlogAllView(View):
     def get(self, request):
-        blog_list = Blog.objects.all()
+        blog_list = Blog.objects.all().order_by('-id')
         paginator = Paginator(blog_list, 10)
         page = request.GET.get('page')
         blogs = paginator.get_page(page)
