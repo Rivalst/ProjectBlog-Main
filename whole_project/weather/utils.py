@@ -1,4 +1,3 @@
-from .models import Weather
 import requests
 
 
@@ -26,8 +25,6 @@ class WeatherData:
 
             temperature = round(weather_data['main']['temp'])
             condition = weather_data['weather'][0]['description']
-            weather = Weather(city=city, temperature=temperature, condition=condition)
-            weather.save()
 
             weather = {
                 'city': city,
@@ -38,6 +35,11 @@ class WeatherData:
             }
 
         else:
-            weather = Weather.objects.last()
+            weather = {
+                'city': 'CityName',
+                'country': 'CountryName',
+                'temperature': None,
+                'icon': None
+            }
 
         return weather
