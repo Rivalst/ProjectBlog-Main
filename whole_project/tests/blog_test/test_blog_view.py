@@ -12,8 +12,8 @@ def create_context(django_user_model):
 
     for num in range(15):
         Blog.objects.create(author=user,
-                            title='Title',
-                            text='Text for blog'
+                            title=f'Title{num}',
+                            text=f'Text for blog{num}'
                             )
 
     cat = Categories.objects.create(category='test')
