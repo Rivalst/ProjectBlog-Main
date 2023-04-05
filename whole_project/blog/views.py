@@ -89,7 +89,7 @@ class BlogDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['comment_form'] = CommentForm()
         context['comments'] = self.get_object().comments.all()
-        context['like_count'] = self.get_object().likes.count
+        context['like_count'] = self.get_object().likes.count()
         context['right_bar'] = home_view.get_context_data()
         context['weather'] = weather_view.get_weather_data()
         if self.request.user.is_authenticated:
