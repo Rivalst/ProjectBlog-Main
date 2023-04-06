@@ -1,5 +1,18 @@
 Small DJANGO MVT project.
 
+-----------------------------------------------------------------------
+That run this project:
+1. Clone this repository
+2. In terminal go to /whole_project/
+3. Write in terminal: python manage.py runserver 
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+Check coverage tests:
+1. You need be in /whole_project/
+2. Write in terminal: pytest --cov
+-----------------------------------------------------------------------
+
 For mail verify: Mail verification, password reset arrives at the terminal where the project is running.
 
 The entire frontend is taken and modified or changed in some places from https://templatemo.com/tm-551-stand-blog.
