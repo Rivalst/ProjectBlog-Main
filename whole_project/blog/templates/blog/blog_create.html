@@ -37,10 +37,11 @@
     <div class="form-group">
         <label for="id_category">Category</label>
         <input type="text" class="form-control" id="id_category" name="category"
-               value="{% for category in category %}{{ category }} {% endfor %}">
+               value="{% for category in category %}{{ category }}{% endfor %}">
 
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+        {% if blog.pk %}<a href="{% url 'blog-delete' blog.pk%} ">Delete blog</a>{% endif %}
 </form>
 
     {% else %}

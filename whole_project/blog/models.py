@@ -19,6 +19,9 @@ class Blog(models.Model):
     def get_absolute_url(self):
         return reverse('blog-detail', args=[str(self.id)])
 
+    class Meta:
+        ordering = ['id']  # need that fix warning 'ectListWarning' in test for blog all
+
 
 class Comment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments')
