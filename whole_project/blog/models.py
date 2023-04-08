@@ -9,7 +9,7 @@ class Blog(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
     image = models.ImageField(default='blog-post-01.jpg', upload_to='blog_avatars')
 
@@ -20,7 +20,7 @@ class Blog(models.Model):
         return reverse('blog-detail', args=[str(self.id)])
 
     class Meta:
-        ordering = ['id']  # need that fix warning 'ectListWarning' in test for blog all
+        ordering = ['id']
 
 
 class Comment(models.Model):

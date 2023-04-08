@@ -12,6 +12,7 @@ from django.core.paginator import Paginator
 
 from django.db.models import Q
 
+from users.models import Subscribers
 from .models import Blog, Tag, Categories, Like
 from .forms import CommentForm
 
@@ -252,6 +253,48 @@ class BlogCategoryDetailView(generic.DetailView):
                 Q(title__icontains=query) | Q(author__username__icontains=query))
             context['q'] = query
 
+        return context
+
+
+class BlogUserAllLikeView(LoginRequiredMixin, generic.ListView):
+    model = Like
+    template_name = 'blog/blog_user_all_like.html'
+    context_object_name = 'all_likes'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        likes = Like.objects.filter(user=self.request.user).order_by('-id')
+        context['user_all_likes'] = [like.blog for like in likes]
+        context['likes_count'] = likes.count()
+        context['author'] = self.request.user
+
+        query = self.request.GET.get('q')
+        if query:
+            likes = likes.filter(Q(blog__title__icontains=query) | Q(blog__author__username__icontains=query))
+            context['user_all_likes'] = [like.blog for like in likes]
+        return context
+
+
+class BlogSubscribeView(LoginRequiredMixin, generic.ListView):
+    model = Subscribers
+    template_name = 'blog/blog_subscribe.html'
+    context_object_name = 'i_user'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        all_subscribe_get_user = Subscribers.objects.filter(user=self.request.user)
+        all_subscribe_get_username = [i.subscribers.username for i in all_subscribe_get_user]
+
+        blog_subscribe = [Blog.objects.filter(author__username=author_name) for author_name in
+                          all_subscribe_get_username]
+
+        blog = [blog for blog_query in blog_subscribe for blog in blog_query]
+        context['blog_subscribe'] = reversed(sorted(blog,
+                                           key=lambda x: x.updated_at if x.updated_at is not None else x.created_at))
+
+        context['author'] = self.request.user
+        context['following'] = Subscribers.objects.filter(user=self.request.user).count()
         return context
 
 

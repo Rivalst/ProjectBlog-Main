@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
 from django.urls import reverse
@@ -7,10 +8,12 @@ from pytest_django.asserts import assertRedirects
 from blog.forms import CommentForm
 from blog.models import Blog, Categories, Comment, Like, Tag
 
+User = get_user_model()
+
 
 @pytest.fixture
 def create_context(django_user_model):
-    user = django_user_model.objects.create_user(username='Bob', password='password')
+    user = User.objects.create_user(username='Bob', password='password')
 
     for num in range(15):
         Blog.objects.create(author=user,
@@ -30,7 +33,8 @@ def create_context(django_user_model):
         'title': 'title',
         'text': 'text',
         'tags': 'tags',
-        'category': 'category'
+        'category': 'category',
+        'image': 'blog_avatars/casey-horner-D4TooCIEyF4-unsplash.jpg'
     }
     context_for_comment = {
         'text': 'TestComment',
@@ -111,3 +115,16 @@ def test_blog_detail_view(client, create_context):
     assert comment.blog == blog
     assert comment.author == user
     assert comment.text == 'TestComment'
+
+
+class TestUserAllLikesView:
+
+    @pytest.mark.django_db
+    def test_all_user_likes(self, client, create_context):
+        client.login(username=create_context['user'], password='password')
+        Like.objects.create(user=create_context['user'], blog=Blog.objects.last())
+
+        response = client.get(reverse('my-likes'))
+        assert response.status_code == 200
+        assert 'user_all_likes' in response.context
+        assert len(response.context['user_all_likes']) == Like.objects.filter(user=create_context['user']).count()

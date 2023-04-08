@@ -14,7 +14,7 @@
             <div class="col-lg-8">
                 <div class="all-blog-posts">
                     <div class="row">
-                        {% for blog in blogs %}
+                        {% for blog in user_all_likes %}
                         <div class="col-lg-6">
                             <div class="blog-post">
                                 {% if blog.image %}
@@ -26,7 +26,7 @@
                                     <span><a href="{% url 'blog-category-detail' blog.category.last.pk %}">{{ blog.category.last }}</a></span>
                                     <a href="{{ blog.get_absolute_url }}"><h4>{{ blog.title }}</h4></a>
                                     <ul class="post-info">
-                                        <li><a href="#">{{ blog.author }}</a></li>
+                                        <li><a href="{% url 'author-view' blog.author.pk %}">{{ blog.author }}</a></li>
                                         <li><a href="#">{{ blog.created_at }}</a></li>
                                         <li><a href="#">{{ blog.comments.count }} comments</a></li>
                                         {% if blog.updated_at %}
@@ -83,22 +83,7 @@
                                 <img src="{{ author.profile.avatar.url }}" alt=""
                                      class="avatar">
                                 <h2><small>Author: {{ author }}</small></h2>
-                                <h3><small>Blogs: {{ blogs.count }}</small></h3>
-                                <h4><small>Followers: {{ followers }} </small></h4>
-                                <h4><small>Following: {{ following}} </small></h4>
-                                {% if author != user %}
-                                {% if subscribed %}
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary full-width">unsubscribe</button>
-                                </form>
-                                {% else %}
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary full-width">subscribe</button>
-                                </form>
-                                {% endif %}
-                                {% endif %}
+                                <h3><small>Likes: {{ likes_count }}</small></h3>
                             </div>
                         </div>
 

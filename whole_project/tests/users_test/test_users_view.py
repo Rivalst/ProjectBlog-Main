@@ -2,12 +2,13 @@ import pytest
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core import mail
+from django.test import RequestFactory
 from django.urls import reverse, reverse_lazy
-
 
 from users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
 from tests.blog_test.test_blog_view import create_context
+from users.views import AuthorDetailView
 
 User = get_user_model()
 
@@ -106,16 +107,18 @@ class TestUsersProfileSettingsView:
     def test_post_user_profile_settings(self, client, user_create, user_login_in):
         valid_data = {
             'username': 'John',
-            'email': 'test2@mail2.com'
+            'email': 'test2@mail2.com',
         }
         user_id = User.objects.get(username=user_create.username).id
 
         response = client.post(reverse('profile-settings'), data=valid_data, follow=True)
+        user = User.objects.get(username=valid_data['username'])
         assert response.status_code == 200
-        assert response.context['user'] == User.objects.get(username=valid_data['username'])
-        assert User.objects.get(username=valid_data['username']).email == valid_data['email']
-        assert User.objects.get(username=valid_data['username']).id == user_id
-        assert User.objects.get(username=valid_data['username']).profile.email_verified is False
+        assert response.context['user'] == user
+        assert user.username == valid_data['username']
+        assert user.email == valid_data['email']
+        assert user.id == user_id
+        assert user.profile.email_verified is False
 
         mess = messages.get_messages(response.wsgi_request)
         assert 'Your profile has been updated' in [m.message for m in mess]
@@ -141,11 +144,18 @@ class TestAuthorDetailView:
     @pytest.mark.django_db
     def test_author_detail(self, client, create_context):
         user = create_context['user']
-        response = client.get(reverse('author-view', kwargs={'pk': user.pk}))
+        request = RequestFactory().get(reverse('author-view', kwargs={'pk': user.id}))
+        request.user = user
 
+        view = AuthorDetailView.as_view()
+
+        response = view(request, pk=user.id)
         assert response.status_code == 200
-        assert 'blogs' in response.context and len(response.context['blogs']) > 0
-        assert 'blogs_last' in response.context and len(response.context['blogs_last']) <= 3
-        assert 'tags' in response.context and len(response.context['tags']) > 0
-        assert 'category' in response.context and len(response.context['category']) == 1
-
+        assert 'blogs' in response.context_data and len(response.context_data['blogs']) > 0
+        assert 'blogs_last' in response.context_data and len(response.context_data['blogs_last']) <= 3
+        assert 'tags' in response.context_data and len(response.context_data['tags']) > 0
+        assert 'category' in response.context_data and len(response.context_data['category']) == 1
+        assert 'followers' in response.context_data
+        assert 'following' in response.context_data
+        assert 'subscribed' in response.context_data
+        assert 'q' not in response.context_data

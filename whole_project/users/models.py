@@ -24,4 +24,19 @@ class Profile(models.Model):
             output_size = (max_size, max_size)
             img.thumbnail(output_size)
             img.save(self.avatar.path)
+
+
 # ----- End model  for profile users -----
+
+# ----- Model for subscribers users -----
+
+class Subscribers(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    subscribers = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribers')
+
+    class Meta:
+        unique_together = ('user', 'subscribers')
+
+    def __str__(self):
+        return f'self.user'
+# ----- End model for subscribers users -----

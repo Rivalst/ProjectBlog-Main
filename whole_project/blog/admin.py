@@ -7,4 +7,3 @@ admin.site.register(Comment)
 admin.site.register(Tag)
 admin.site.register(Categories)
 admin.site.register(Like)
-
