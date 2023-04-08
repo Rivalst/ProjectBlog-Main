@@ -14,7 +14,7 @@
             <div class="col-lg-8">
                 <div class="all-blog-posts">
                     <div class="row">
-                        {% for blog in blogs %}
+                        {% for blog in blog_subscribe %}
                         <div class="col-lg-6">
                             <div class="blog-post">
                                 {% if blog.image %}
@@ -83,9 +83,7 @@
                                 <img src="{{ author.profile.avatar.url }}" alt=""
                                      class="avatar">
                                 <h2><small>Author: {{ author }}</small></h2>
-                                <h3><small>Blogs: {{ blogs.count }}</small></h3>
-                                <h4><small>Followers: {{ followers }} </small></h4>
-                                <h4><small>Following: {{ following}} </small></h4>
+                                <h4><small>Following: {{ following }} </small></h4>
                                 {% if author != user %}
                                 {% if subscribed %}
                                 <form method="post">

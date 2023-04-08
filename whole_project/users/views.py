@@ -1,9 +1,10 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic.edit import FormView
 from django.views import View, generic
 
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
@@ -19,7 +20,7 @@ from django.core.mail import EmailMessage
 from django.db.models import Q
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, DeleteAccountForm
-from .models import Profile
+from .models import Profile, Subscribers
 
 from blog.models import Blog, Tag, Categories
 
@@ -217,10 +218,17 @@ class AuthorDetailView(generic.DetailView):
         tags = Tag.objects.filter(blog__author=user).distinct()
         category = Categories.objects.filter(blog__author=user).distinct()
 
+        followers = Subscribers.objects.filter(subscribers=user)
+
+        following = Subscribers.objects.filter(user=user)
         context['blogs'] = blogs
         context['blogs_last'] = blogs_last
         context['tags'] = tags
         context['category'] = category
+
+        context['followers'] = followers.count()
+        context['following'] = following.count()
+        context['user'] = self.request.user
 
         query = self.request.GET.get('q')
         if query:
@@ -228,5 +236,40 @@ class AuthorDetailView(generic.DetailView):
                 Q(title__icontains=query) | Q(author__username__icontains=query))
             context['q'] = query
 
+        try:
+            sub = Subscribers.objects.get(user=self.request.user, subscribers=user)
+            context['subscribed'] = True
+        except ObjectDoesNotExist:
+            context['subscribed'] = False
+
         return context
-# ----- End User Profile View ----
+
+    def post(self, *args, **kwargs):
+        user = self.request.user
+        author = self.get_object()
+
+        try:
+            sub = Subscribers.objects.get(user=user, subscribers=author)
+            sub.delete()
+            messages.error(self.request, f'Unsubscribe - {author}')
+            return redirect('author-view', pk=author.pk)
+        except ObjectDoesNotExist:
+            Subscribers.objects.create(user=user, subscribers=author)
+            messages.success(self.request, f'Subscribe - {author}')
+            return redirect('author-view', pk=author.pk)
+    # ----- End User Profile View ----
+
+
+class UserPasswordResetView(LoginRequiredMixin, PasswordResetView):
+    template_name = 'users/password_reset.html'
+
+    def form_valid(self, form):
+
+        if form.cleaned_data['email'] == self.request.user.email:
+            response = super().form_valid(form)
+            messages.success(self.request, 'Password reset email has been sent.')
+            return redirect('password_reset_done')
+        else:
+            messages.error(self.request, 'Wrong email')
+            return redirect('password-reset')
+

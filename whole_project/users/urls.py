@@ -5,6 +5,8 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
     PasswordResetDoneView
 from django.views import generic
 
+from .views import UserPasswordResetView
+
 urlpatterns = [
     # ----- main path -----
     path('login/', views.UsersLoginView.as_view(), name='login'),
@@ -27,8 +29,7 @@ urlpatterns = [
     # ----- end verify email -----
 
     # ----- change password -----
-    path('password-reset/', PasswordResetView.as_view(template_name='users/password_reset.html'),
-         name='password-reset'),
+    path('password-reset/', UserPasswordResetView.as_view(), name='password-reset'),
 
     path('password-reset-done/', PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'),
          name='password_reset_done'),

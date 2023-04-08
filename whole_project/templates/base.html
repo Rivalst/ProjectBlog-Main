@@ -46,7 +46,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'not-work' %}">Posts subscriptions</a>
+                        <a class="nav-link" href="{% url 'blog-sub' %}">Posts subscriptions</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog-all' %}">All blogs</a>
@@ -67,7 +67,7 @@
                             <a class="dropdown-item" href="{% url 'profile-settings' %}">Settings</a>
                             <a class="dropdown-item" href="{% url 'blog-create' %}">Create Blog</a>
                             <a class="dropdown-item" href="{% url 'author-view' user.pk %}">All my blogs</a>
-                            <a class="dropdown-item" href="{% url 'not-work' %}">All my likes</a>
+                            <a class="dropdown-item" href="{% url 'my-likes' %}">All my likes</a>
 
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
